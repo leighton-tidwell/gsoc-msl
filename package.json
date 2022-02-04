@@ -2,6 +2,7 @@
   "name": "gsoc-msl",
   "version": "0.1.0",
   "private": true,
+  "homepage": "sites/89cs/GNOC/MSL/",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -9,6 +10,7 @@
   },
   "dependencies": {
     "@vicons/ionicons5": "^0.11.0",
+    "axios": "^0.25.0",
     "core-js": "^3.6.5",
     "dayjs": "^1.10.7",
     "vue": "^3.0.0",

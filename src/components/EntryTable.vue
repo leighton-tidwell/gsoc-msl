@@ -2,14 +2,17 @@
   <n-data-table
     :max-height="500"
     :columns="columns"
-    :data="data"
+    :data="entries.value"
     :pagination="pagination"
+    :loading="loading"
   />
   <edit-entry
+    :loading="editLoading"
     v-bind="selectedEntry"
     :showModal="showModal"
-    @closeModal="toggleEditModal"
-    @updateEntry="testCall"
+    @closeModal="closeModal"
+    @updateEntry="updateEntry"
+    @deleteEntry="deleteEntry"
   />
 </template>
 
@@ -36,14 +39,17 @@ const createColumns = ({ editEntry }) => [
         style: "cursor:pointer",
       });
     },
+    width: 100,
   },
   {
     title: "Time",
     key: "time",
+    width: 100,
   },
   {
     title: "Operator",
     key: "operator",
+    width: 200,
   },
   {
     title: "Entry",
@@ -52,22 +58,26 @@ const createColumns = ({ editEntry }) => [
 ];
 
 const editEntry = (entry) => {
-  toggleEditModal();
-  selectedEntry.value = entry;
+  openModal();
+  selectedEntry.value = { id: entry.key, ...entry };
 };
 
-const toggleEditModal = () => {
-  showModal.value = !showModal.value;
+const closeModal = () => {
+  showModal.value = false;
+};
+
+const openModal = () => {
+  showModal.value = true;
 };
 
 export default defineComponent({
   props: {
-    entries: Object,
+    entries: Array,
+    loading: Boolean,
+    editLoading: Boolean,
   },
-  setup(props) {
-    console.log(props.entries);
+  setup() {
     return {
-      data: props.entries,
       columns: createColumns({
         editEntry,
       }),
@@ -76,18 +86,27 @@ export default defineComponent({
       },
       showModal,
       selectedEntry,
-      toggleEditModal,
+      closeModal,
     };
   },
   methods: {
-    testCall(formValue) {
-      console.log(formValue);
+    updateEntry(formValue) {
+      this.$emit("updateEntry", formValue);
+    },
+    deleteEntry(entry) {
+      this.$emit("deleteEntry", entry);
     },
   },
-  emits: ["updateEntry"],
+  emits: ["updateEntry", "deleteEntry"],
   components: {
     NDataTable,
     EditEntry,
   },
 });
 </script>
+
+<style scoped>
+.hidden {
+  padding: 100px;
+}
+</style>

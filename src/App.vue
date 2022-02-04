@@ -1,25 +1,27 @@
 <template>
   <n-config-provider :theme="darkTheme">
     <n-loading-bar-provider>
-      <n-layout position="absolute">
-        <n-layout-header class="nav" bordered>
-          <n-text style="font-size: 18px; display: flex; align-items: center"
-            ><n-icon size="30" style="margin-right: 8px"
-              ><airplane-outline /></n-icon
-            >GSOC MSL</n-text
-          >
-          <div
-            style="
-              display: flex;
-              align-items: center;
-              justify-content: flex-end;
-            "
-          >
-            <navigation />
-          </div>
-        </n-layout-header>
-        <router-view />
-      </n-layout>
+      <n-notification-provider :max="3">
+        <n-layout position="absolute">
+          <n-layout-header class="nav" bordered>
+            <n-text style="font-size: 18px; display: flex; align-items: center"
+              ><n-icon size="30" style="margin-right: 8px"
+                ><airplane-outline /></n-icon
+              >GSOC MSL</n-text
+            >
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+              "
+            >
+              <navigation />
+            </div>
+          </n-layout-header>
+          <router-view />
+        </n-layout>
+      </n-notification-provider>
     </n-loading-bar-provider>
   </n-config-provider>
 </template>
@@ -35,6 +37,7 @@ import {
   NText,
   NIcon,
   NLoadingBarProvider,
+  NNotificationProvider,
 } from "naive-ui";
 import { AirplaneOutline } from "@vicons/ionicons5";
 
@@ -57,6 +60,7 @@ export default defineComponent({
     RouterView,
     Navigation,
     NLoadingBarProvider,
+    NNotificationProvider,
   },
 });
 </script>
