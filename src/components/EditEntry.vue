@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
 import {
   NModal,
   NCard,
@@ -89,7 +89,7 @@ import {
   NPopconfirm,
   useNotification,
 } from "naive-ui";
-import { updateListItem, removeFromList } from "../api/";
+import { updateListItem, removeFromList, getPersonnel } from "../api/";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
@@ -111,20 +111,39 @@ export default defineComponent({
     const deleteLoading = ref(false);
     const successText = ref("");
     const errorText = ref("");
+    const loadingOperators = ref(false);
+    const operatorOptions = ref([]);
+
+    onMounted(() => {
+      loadingOperators.value = true;
+      getPersonnel()
+        .then((data) => {
+          const formattedList = data
+            .map((person) => ({
+              label: person.name,
+              value: person.name,
+              key: person.Id,
+            }))
+            .sort((a, b) =>
+              a.value < b.value ? -1 : a.value > b.value ? 1 : 0
+            );
+          operatorOptions.value = formattedList;
+          loadingOperators.value = false;
+        })
+        .catch((error) => {
+          notification["error"]({
+            content: "An error has occured.",
+            meta: error.message,
+            duration: 10000,
+          });
+          loadingOperators.value = false;
+        });
+    });
+
     return {
       formRef,
-      operatorOptions: [
-        {
-          label: "SrA Tidwell",
-          value: "SrA Tidwell",
-          key: "sra-tidwell",
-        },
-        {
-          label: "SrA Test",
-          value: "SrA Test",
-          key: "sra-test",
-        },
-      ],
+      operatorOptions,
+      loadingOperators,
       formValue: ref({
         key: props.id,
         date: dayjs(props.date).valueOf(),

@@ -45,6 +45,14 @@ const createColumns = ({ editEntry }) => [
     title: "Time",
     key: "time",
     width: 100,
+    sortOrder: "descend",
+    sorter: (a, b) => {
+      const cleanA = Number(a.time.split(":").join(""));
+      const cleanB = Number(b.time.split(":").join(""));
+      if (cleanA < cleanB) return -1;
+      else if (cleanA > cleanB) return 1;
+      else return 0;
+    },
   },
   {
     title: "Operator",

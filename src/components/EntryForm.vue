@@ -28,6 +28,7 @@
         placeholder="Select Operator"
         :options="operatorOptions"
         filterable
+        :loading="loadingOperators"
       />
     </n-form-item>
     <n-form-item label="Entry" path="entry">
@@ -54,7 +55,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
 import {
   NForm,
   NFormItem,
@@ -69,33 +70,10 @@ import {
   useNotification,
 } from "naive-ui";
 import { Add } from "@vicons/ionicons5";
-import { insertIntoList } from "../api/";
+import { insertIntoList, getPersonnel } from "../api/";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
-
-const operatorOptions = [
-  {
-    label: "SrA Tidwell",
-    value: "SrA Tidwell",
-    key: "sra-tidwell",
-  },
-  {
-    label: "SrA Test",
-    value: "SrA Test",
-    key: "sra-test",
-  },
-  {
-    label: "SrA 2",
-    value: "SrA 2",
-    key: "sra-2",
-  },
-  {
-    label: "SrA 3",
-    value: "SrA 3",
-    key: "sra-3",
-  },
-];
 
 export default defineComponent({
   props: {
@@ -105,7 +83,36 @@ export default defineComponent({
   setup(props) {
     const formRef = ref(null);
     const loading = ref(false);
+    const loadingOperators = ref(false);
+    const operatorOptions = ref([]);
     const notification = useNotification();
+
+    onMounted(() => {
+      loadingOperators.value = true;
+      getPersonnel()
+        .then((data) => {
+          const formattedList = data
+            .map((person) => ({
+              label: person.name,
+              value: person.name,
+              key: person.Id,
+            }))
+            .sort((a, b) =>
+              a.value < b.value ? -1 : a.value > b.value ? 1 : 0
+            );
+          operatorOptions.value = formattedList;
+          loadingOperators.value = false;
+        })
+        .catch((error) => {
+          notification["error"]({
+            content: "An error has occured.",
+            meta: error.message,
+            duration: 10000,
+          });
+          loadingOperators.value = false;
+        });
+    });
+
     return {
       formRef,
       formValue: ref({
@@ -156,6 +163,7 @@ export default defineComponent({
         ],
       },
       operatorOptions,
+      loadingOperators,
       loading,
       notification,
     };
@@ -167,7 +175,12 @@ export default defineComponent({
       this.formRef.validate((errors) => {
         if (!errors) {
           const entryObject = {
-            date: dayjs(this.formValue.date).toISOString(),
+            date: dayjs(
+              `${dayjs(this.formValue.date).format("MM/DD/YYY")} ${
+                this.formValue.time
+              }`,
+              "MM/DD/YYYY HH:mm"
+            ).toISOString(),
             time: this.formValue.time,
             operator: this.formValue.operator,
             entry: this.formValue.entry,

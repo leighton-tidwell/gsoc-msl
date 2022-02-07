@@ -49,18 +49,19 @@ export default defineComponent({
     loadingBar.start();
 
     onMounted(() => {
-      setTimeout(() => loadingBar.finish(), 1000);
       loading.value = true;
       getEntriesForDate(selectedDate.value)
         .then((data) => {
           const formattedData = data.map((entry) => {
             return {
               ...entry,
+              time: dayjs(entry.date).format("HH:mm"),
               key: entry.Id,
             };
           });
           entries.value = formattedData;
           loading.value = false;
+          setTimeout(() => loadingBar.finish(), 500);
         })
         .catch((error) => {
           notification["error"]({
@@ -69,6 +70,7 @@ export default defineComponent({
             duration: 10000,
           });
           loading.value = false;
+          setTimeout(() => loadingBar.error(), 500);
         });
     });
 
@@ -88,22 +90,13 @@ export default defineComponent({
       this.loading = true;
       getEntriesForDate(this.selectedDate)
         .then((data) => {
-          const formattedData = data
-            .map((entry) => {
-              return {
-                ...entry,
-                key: entry.Id,
-              };
-            })
-            .sort((a, b) => {
-              const cleanA = Number(a.time.split(":").join(""));
-              const cleanB = Number(b.time.split(":").join(""));
-              console.log(cleanA, cleanB);
-              console.log(cleanA < cleanB);
-              if (cleanA < cleanB) return -1;
-              else if (cleanA > cleanB) return 1;
-              else return 0;
-            });
+          const formattedData = data.map((entry) => {
+            return {
+              ...entry,
+              key: entry.Id,
+            };
+          });
+
           this.entries.value = formattedData;
           this.loading = false;
         })

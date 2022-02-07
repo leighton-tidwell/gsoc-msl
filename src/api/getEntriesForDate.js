@@ -9,15 +9,36 @@ const getEntriesForDate = async (date) => {
   const devTestData = [
     {
       Id: 0,
-      date: dayjs(date).toISOString(),
+      date: "2022-02-07T15:00:00-05:00",
       time: "15:00",
       operator: "SrA Tidwell",
       entry: "Test entry test entry",
     },
     {
       Id: 1,
-      date: dayjs(date).toISOString(),
+      date: dayjs("02/07/2022 12:00", "MM/DD/YYYY HH:mm").toISOString(),
       time: "12:00",
+      operator: "SrA Test",
+      entry: "Test entry test entry",
+    },
+    {
+      Id: 3,
+      date: dayjs("02/07/2022 18:00", "MM/DD/YYYY HH:mm").toISOString(),
+      time: "18:00",
+      operator: "SrA Test",
+      entry: "Test entry test entry",
+    },
+    {
+      Id: 4,
+      date: dayjs("02/07/2022 05:00", "MM/DD/YYYY HH:mm").toISOString(),
+      time: "05:00",
+      operator: "SrA Test",
+      entry: "Test entry test entry",
+    },
+    {
+      Id: 5,
+      date: dayjs("02/07/2022 06:00", "MM/DD/YYYY HH:mm").toISOString(),
+      time: "06:00",
       operator: "SrA Test",
       entry: "Test entry test entry",
     },
