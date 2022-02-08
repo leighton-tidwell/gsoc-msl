@@ -148,11 +148,10 @@ export default {
               const ws = wb.addWorksheet();
 
               ws.columns = [
-                { key: "1", width: 150 },
+                { key: "1", width: 15 },
                 { key: "2", width: 15 },
-                { key: "3", width: 10 },
-                { key: "4", width: 50 },
-                { key: "5", width: 20 },
+                { key: "3", width: 30 },
+                { key: "4", width: 150 },
               ];
 
               ws.addRow(["DATE", "TIME", "OPERATOR", "ENTRY"]);
