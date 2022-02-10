@@ -176,7 +176,7 @@ export default defineComponent({
         if (!errors) {
           const entryObject = {
             date: dayjs(
-              `${dayjs(this.formValue.date).format("MM/DD/YYY")} ${
+              `${dayjs(this.formValue.date).format("MM/DD/YYYY")} ${
                 this.formValue.time
               }`,
               "MM/DD/YYYY HH:mm"

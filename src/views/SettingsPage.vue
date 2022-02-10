@@ -194,6 +194,9 @@ export default {
       loadingOperators,
       loadingOperatorAdd,
       notification,
+      pagination: {
+        pageSize: 10,
+      },
     };
   },
   methods: {
