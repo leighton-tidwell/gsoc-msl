@@ -189,6 +189,7 @@ export default defineComponent({
           insertIntoList("mslLog", entryObject)
             .then((Id) => {
               this.$emit("addEntry", { ...entryObject, key: Id });
+              this.formValue.entry = "";
               this.loading = false;
             })
             .catch((error) => {
