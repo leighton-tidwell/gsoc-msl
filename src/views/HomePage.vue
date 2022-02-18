@@ -93,6 +93,7 @@ export default defineComponent({
           const formattedData = data.map((entry) => {
             return {
               ...entry,
+              time: dayjs(entry.date).format("HH:mm"),
               key: entry.Id,
             };
           });
