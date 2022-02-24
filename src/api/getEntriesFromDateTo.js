@@ -56,7 +56,7 @@ const getEntriesFromDateTo = async (start, end) => {
       );
 
     const data = await axios.get(
-      `${process.env.VUE_APP_API}/web/lists/getbytitle('mslLog')/items?$filter=date ge '${formattedStartDate}' and date le '${formattedEndDate}'&$orderby=date asc,time asc`,
+      `${process.env.VUE_APP_API}/web/lists/getbytitle('mslLog')/items?$top=5000&$filter=date ge '${formattedStartDate}' and date le '${formattedEndDate}'&$orderby=date asc,time asc`,
       {
         headers: {
           Accept: "application/json; odata=verbose",
